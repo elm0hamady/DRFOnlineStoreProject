@@ -1,0 +1,16 @@
+.drf-venv/
+venv/
+__pycache__/
+*.pyc
+.env
+.env.*
+media/
+staticfiles/
+
+.idea/
+.vscode/
+
+.coverage
+htmlcov/
+
+*.log
