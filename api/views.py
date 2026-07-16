@@ -30,7 +30,12 @@ class ProductListListCreateClass(generics.ListCreateAPIView):
         filters.SearchFilter,
         filters.OrderingFilter
     ]
-   
+    # pagination_class = LimitOffsetPagination
+    pagination_class = PageNumberPagination
+    pagination_class.page_size = 3
+    pagination_class.max_page_size = 4
+    pagination_class.page_size_query_param = 'size'
+    pagination_class.page_query_param = 'pagenum'
 
     search_fields = ['name','description']
     ordering_fields = ['name','stock','price']
