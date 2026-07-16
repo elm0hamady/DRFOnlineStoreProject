@@ -6,7 +6,11 @@ from rest_framework.decorators import api_view
 from rest_framework import generics 
 from rest_framework.permissions import IsAuthenticated , IsAdminUser , AllowAny
 from rest_framework.views import APIView
-from .filters import ProductFilter
+from .filters import ProductFilter ,InStockFilterBackend
+from rest_framework import filters
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.pagination import PageNumberPagination, LimitOffsetPagination
+
 
 
 
@@ -20,6 +24,17 @@ class ProductListListCreateClass(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     filterset_class = ProductFilter
+    filter_backends = [
+        InStockFilterBackend,
+        DjangoFilterBackend,
+        filters.SearchFilter,
+        filters.OrderingFilter
+    ]
+   
+
+    search_fields = ['name','description']
+    ordering_fields = ['name','stock','price']
+    
 
     def get_permissions(self):
         self.permission_classes = [AllowAny]
