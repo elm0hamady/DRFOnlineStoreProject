@@ -36,11 +36,11 @@ class ProductListListCreateClass(generics.ListCreateAPIView):
         filters.OrderingFilter
     ]
     # pagination_class = LimitOffsetPagination
-    pagination_class = PageNumberPagination
-    pagination_class.page_size = 3
-    pagination_class.max_page_size = 4
-    pagination_class.page_size_query_param = 'size'
-    pagination_class.page_query_param = 'pagenum'
+    pagination_class = None
+    # pagination_class.page_size = 3
+    # pagination_class.max_page_size = 4
+    # pagination_class.page_size_query_param = 'size'
+    # pagination_class.page_query_param = 'pagenum'
 
     search_fields = ['name','description']
     ordering_fields = ['name','stock','price']
@@ -48,6 +48,11 @@ class ProductListListCreateClass(generics.ListCreateAPIView):
     @method_decorator(cache_page(60*15,key_prefix='product_list'))
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
+    
+    def get_queryset(self):
+        import time
+        time.sleep(2)
+        return super().get_queryset()
 
     def get_permissions(self):
         self.permission_classes = [AllowAny]
@@ -80,7 +85,7 @@ class OrderViewSet(ModelViewSet):
     filterset_class = OrderFilter
     filter_backends = [DjangoFilterBackend]
 
-    @method_decorator(cache_page(60*15,key_prefix='product_list'))
+    @method_decorator(cache_page(60 * 15, key_prefix='product_list'))
     @method_decorator(vary_on_headers('Authorization'))
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
@@ -89,7 +94,7 @@ class OrderViewSet(ModelViewSet):
         serializer.save(user=self.request.user)
     
     def get_serializer_class(self):
-        if self.action in ['update','create']:
+        if self.action == 'create' or self.action == 'update':
             return OrderCreateSerializer
         return super().get_serializer_class()
 

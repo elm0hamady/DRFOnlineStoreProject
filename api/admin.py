@@ -1,11 +1,15 @@
 from django.contrib import admin
-from .models import OrderItem ,Order,User
+from api.models import Order, OrderItem, User, Product
+
+# Register your models here.
 class OrderItemInline(admin.TabularInline):
     model = OrderItem
 
-@admin.register(Order)
-class AdminOrder(admin.ModelAdmin):
+class OrderAdmin(admin.ModelAdmin):
     inlines = [
         OrderItemInline
     ]
+
+admin.site.register(Order, OrderAdmin)
 admin.site.register(User)
+admin.site.register(Product)

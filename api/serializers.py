@@ -38,7 +38,6 @@ class OrderItemSerializer(serializers.ModelSerializer):
         )
 
 class OrderCreateSerializer(serializers.ModelSerializer): 
-    
     class OrderItemCreateSerializer(serializers.ModelSerializer):
         class Meta:
             model = OrderItem
@@ -46,14 +45,13 @@ class OrderCreateSerializer(serializers.ModelSerializer):
     
     order_id = serializers.UUIDField(read_only=True)
     items = OrderItemCreateSerializer(many=True,required=False)
-    user = serializers.StringRelatedField()
 
     def update(self, instance, validated_data):
         items_data = validated_data.pop('items')
         with transaction.atomic():
             instance = super().update(instance, validated_data)
 
-            if items_data.type() is not None:
+            if items_data is not None:
                 instance.items.all().delete()
 
                 for item in items_data:
@@ -77,6 +75,9 @@ class OrderCreateSerializer(serializers.ModelSerializer):
             'order_status' ,
             'items'
         )
+        extra_kwargs = {
+            'user':{'read_only': True}
+        }
 
 class OrderSerializer(serializers.ModelSerializer):
     order_id = serializers.UUIDField(read_only=True)

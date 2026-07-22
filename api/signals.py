@@ -4,8 +4,8 @@ from api.models import Product
 from django.core.cache import cache
 
 
-@receiver([post_save,post_delete],sender=Product)
-def invalidated_product_cache(sender,instance,**kwargs):
+@receiver([post_save, post_delete], sender=Product)
+def invalidate_product_cache(sender, instance, **kwargs):
     """
     Invalidate product list caches when a product is created, updated, or deleted
     """

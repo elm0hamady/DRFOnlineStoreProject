@@ -4,12 +4,12 @@ GET http://localhost:8000/products/ HTTP/1.1
 
 POST http://localhost:8000/products/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzg0MDAzMDYxLCJpYXQiOjE3ODQwMDI3NjEsImp0aSI6Ijg4MjI0YmRiODY4ZDRhMDhiMmQ1ZjMzM2FmYWYwY2VhIiwidXNlcl9pZCI6IjIifQ.MOprY-tXVXYmQCNSQZge01DYgdUOILII-8i8QdFEugQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzg0NzM2Nzc1LCJpYXQiOjE3ODQ3MzMxNzUsImp0aSI6IjliNDJhOGRjYzhlMzRjYjhiZWE3YmUzNDQyMmRmMTE5IiwidXNlcl9pZCI6IjEifQ._rLUkp0oXenUbh2O3XMQmiuxkzgX4z-UBwoDydVWyQs
 
 {
 	"name": "Television",
 	"price": 300.00,
-	"stock": 14,
+	"stock": 11,
 	"description": "An amazing new TV"    
 }
 
@@ -40,8 +40,8 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:8000/orders/ HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzg0MjEwNDMzLCJpYXQiOjE3ODQyMTAxMzMsImp0aSI6ImU0NjVlODFlMGQzMTRiMDJiYjg5MWFkMTllODQyNjIwIiwidXNlcl9pZCI6IjQifQ.pHHuXafKbO78WDvH2TpfDDJUAMyOQAgWqIIGPYGliWM
+GET http://localhost:8000/products/ HTTP/1.1
+Authorization: Bearer  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzg0NzM2Nzc1LCJpYXQiOjE3ODQ3MzMxNzUsImp0aSI6IjliNDJhOGRjYzhlMzRjYjhiZWE3YmUzNDQyMmRmMTE5IiwidXNlcl9pZCI6IjEifQ._rLUkp0oXenUbh2O3XMQmiuxkzgX4z-UBwoDydVWyQs
 ###
 POST http://localhost:8000/api/token/refresh/ HTTP/1.1
 Content-Type: application/json
@@ -57,8 +57,28 @@ DELETE  http://localhost:8000/products/8/ HTTP/1.1
 ###
 PATCH  http://localhost:8000/products/7/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzg0MDAzMDYxLCJpYXQiOjE3ODQwMDI3NjEsImp0aSI6Ijg4MjI0YmRiODY4ZDRhMDhiMmQ1ZjMzM2FmYWYwY2VhIiwidXNlcl9pZCI6IjIifQ.MOprY-tXVXYmQCNSQZge01DYgdUOILII-8i8QdFEugQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzg0NzMyOTUzLCJpYXQiOjE3ODQ3MjkzNTMsImp0aSI6IjViM2E5YmZiZWJlNDQ4ZTRhYzY0NmNiNTBjMWFjY2I1IiwidXNlcl9pZCI6IjEifQ.sQiAYDWBn_buvLmtzhQ-BXOjAkYJVgVUlC3KvR0k7G4
 
 {
 	"stock": "8"
+}
+
+###
+POST http://localhost:8000/orders/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzg0NzI4Njk0LCJpYXQiOjE3ODQ3MjgzOTQsImp0aSI6ImY0OGEyYzQxMDJhMDQxZmQ5OTA1MzZjMTNmZmRlYzQwIiwidXNlcl9pZCI6IjEifQ.4lrFeUzTpMECqrtA1NujHPk9dr0AJ2-y1u3R2awgz-0
+
+{
+   "order_status": "Pending",
+    "items": [
+      {
+		"product" : 3,
+        "quantity": 2
+      },
+      {
+        "product" : 1,
+        "quantity": 3
+       
+      }
+    ] 
 }
