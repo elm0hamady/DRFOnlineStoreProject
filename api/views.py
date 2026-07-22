@@ -1,6 +1,9 @@
 from django.shortcuts import get_object_or_404
 from api.serializers import ProductSerializer,OrderSerializer,OrderItemSerializer,OrderCreateSerializer
 from api.models import Product,Order,OrderItem
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+from django.views.decorators.vary import vary_on_headers,vary_on_cookie
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -42,6 +45,9 @@ class ProductListListCreateClass(generics.ListCreateAPIView):
     search_fields = ['name','description']
     ordering_fields = ['name','stock','price']
     
+    @method_decorator(cache_page(60*15,key_prefix='product_list'))
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 
     def get_permissions(self):
         self.permission_classes = [AllowAny]
@@ -73,6 +79,11 @@ class OrderViewSet(ModelViewSet):
     pagination_class = None
     filterset_class = OrderFilter
     filter_backends = [DjangoFilterBackend]
+
+    @method_decorator(cache_page(60*15,key_prefix='product_list'))
+    @method_decorator(vary_on_headers('Authorization'))
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
