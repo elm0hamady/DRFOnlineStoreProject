@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-from api.serializers import ProductSerializer,OrderSerializer,OrderItemSerializer
+from api.serializers import ProductSerializer,OrderSerializer,OrderItemSerializer,OrderCreateSerializer
 from api.models import Product,Order,OrderItem
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -73,6 +73,14 @@ class OrderViewSet(ModelViewSet):
     pagination_class = None
     filterset_class = OrderFilter
     filter_backends = [DjangoFilterBackend]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+    
+    def get_serializer_class(self):
+        if self.action in ['update','create']:
+            return OrderCreateSerializer
+        return super().get_serializer_class()
 
     def get_queryset(self):
         qs = super().get_queryset()

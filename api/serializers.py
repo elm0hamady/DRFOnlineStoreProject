@@ -1,3 +1,4 @@
+from django.db import transaction
 import uuid
 from rest_framework import serializers
 from .models import Product,Order,OrderItem
@@ -35,7 +36,48 @@ class OrderItemSerializer(serializers.ModelSerializer):
             'quantity',
             'item_subtotal',
         )
+
+class OrderCreateSerializer(serializers.ModelSerializer): 
     
+    class OrderItemCreateSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = OrderItem
+            fields = ('product','quantity')
+    
+    order_id = serializers.UUIDField(read_only=True)
+    items = OrderItemCreateSerializer(many=True,required=False)
+    user = serializers.StringRelatedField()
+
+    def update(self, instance, validated_data):
+        items_data = validated_data.pop('items')
+        with transaction.atomic():
+            instance = super().update(instance, validated_data)
+
+            if items_data.type() is not None:
+                instance.items.all().delete()
+
+                for item in items_data:
+                    OrderItem.objects.create(order=instance,**item)
+        return instance
+
+    def create(self, validated_data):
+        items_data = validated_data.pop('items')
+        with transaction.atomic():
+            order = Order.objects.create(**validated_data)
+
+            for item in items_data:
+                OrderItem.objects.create(order=order,**item)
+        return order
+    
+    class Meta:
+        model = Order
+        fields = (
+            'user',
+            'order_id' ,
+            'order_status' ,
+            'items'
+        )
+
 class OrderSerializer(serializers.ModelSerializer):
     order_id = serializers.UUIDField(read_only=True)
     items = OrderItemSerializer(many=True)
